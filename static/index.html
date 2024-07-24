@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mouse Tracking</title>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #tracker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="tracker"></div>
+    <script>
+        const tracker = document.getElementById('tracker');
+
+        document.addEventListener('mousemove', function(event) {
+            const x = event.clientX;
+            const y = event.clientY;
+            
+            // Update the tracker div position
+            tracker.style.left = `${x}px`;
+            tracker.style.top = `${y}px`;
+
+            // Send mouse position to server
+            fetch('/track-mouse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ x: x, y: y }),
+            });
+        });
+    </script>
+</body>
+</html>
